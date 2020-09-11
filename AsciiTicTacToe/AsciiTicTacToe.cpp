@@ -7,7 +7,9 @@
 int main()
 {
     Game* game = new Game();
-    game->DrawBoard();
+    game->Play();
+
+    delete game;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
