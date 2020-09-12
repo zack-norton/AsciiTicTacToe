@@ -17,6 +17,7 @@ public:
 
 	void DrawBoard();
 	void DrawPosition(unsigned short value);
+	bool CheckWinState();
 
 	void Play();
 

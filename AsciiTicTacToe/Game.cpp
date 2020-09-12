@@ -141,9 +141,156 @@ void Game::Play() {
 				}
 			}
 		}
+		if (this->CheckWinState()) {
+			isRunning = false;
+		}
 		this->DrawBoard();
 	}
 
+}
+
+bool Game::CheckWinState() {
+	bool isWinner = false;
+	//horizontal rows
+	if (this->board[0][0] != 0) {
+		//check 0 row columns
+		if (this->board[0][0] == this->board[0][1] && this->board[0][1] == this->board[0][2]) {
+			//top row won
+			//check who won
+			if (this->board[0][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	else if (this->board[1][0] != 0) {
+		//check 1 row columns
+		if (this->board[1][0] == this->board[1][1] && this->board[1][1] == this->board[1][2]) {
+			//middle row won
+			//check who won
+			if (this->board[1][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	else if (this->board[2][0] != 0) {
+		//check 2 row columns
+		if (this->board[2][0] == this->board[2][1] && this->board[2][1] == this->board[2][2]) {
+			//bottom row won
+			//check who won
+			if (this->board[2][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	//vertical columns
+	else if (this->board[0][0] != 0) {
+		//check 0 column rows
+		if (this->board[0][0] == this->board[1][0] && this->board[1][0] == this->board[2][0]) {
+			//left column won
+			//check who won
+			if (this->board[0][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	else if (this->board[0][1] != 0) {
+		//check 1 columns rows
+		if (this->board[0][1] == this->board[1][1] && this->board[1][1] == this->board[2][1]) {
+			//middle column won
+			//check who won
+			if (this->board[0][1] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	else if (this->board[0][2] != 0) {
+		//check 2 columns rows
+		if (this->board[0][2] == this->board[1][2] && this->board[1][2] == this->board[2][2]) {
+			//right column won
+			//check who won
+			if (this->board[0][2] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	//diagonal
+	else if (this->board[0][0] != 0) {
+		//check 0 diagonal
+		if (this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2]) {
+			
+			//check who won
+			if (this->board[0][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	else if (this->board[2][0] != 0) {
+		//check 2 row diagonal
+		if (this->board[2][0] == this->board[1][1] && this->board[1][1] == this->board[0][2]) {
+			
+			//check who won
+			if (this->board[2][0] == 1) {
+				//x won
+				std::cout << "X player won!" << endl;
+				isWinner = true;
+			}
+			else {
+				//O won
+				std::cout << "O player won!" << endl;
+				isWinner = true;
+			}
+		}
+	}
+	return isWinner;
 }
 
 std::vector<string> Game::split(const std::string& text, char separator) {
