@@ -85,65 +85,48 @@ void Game::Play() {
 	while (isRunning) {
 		if (isXTurn) {
 			std::cout << "X player move: " << endl;
-			string input;
-			std::cin >> input;
-
-			if (input.compare("exit") == 0 || input.compare("quit") == 0) {
-				//quit game
-				isRunning = false;
-				break;
-			}
-			else {
-				std::vector<string> moveStr = Game::split(input, ',');
-				int move[2];
-
-				move[0] = std::stoi(moveStr[0]);
-				move[1] = std::stoi(moveStr[1]);
-
-				if (board[move[0]][move[1]] == 0) {
-					//play
-					board[move[0]][move[1]] = 1;
-					isXTurn = !isXTurn;
-				}
-				else {
-					//can't play
-					std::cout << "Can't overwrite another move!" << endl;
-					continue;
-				}
-			}
 		}
 		else {
-			std::cout << "0 player move: " << endl;
-			string input;
-			std::cin >> input;
+			std::cout << "O player move: " << endl;
+		}
 
-			if (input.compare("exit") == 0 || input.compare("quit") == 0) {
-				//quit game
-				isRunning = false;
-				break;
-			}
-			else {
-				std::vector<string> moveStr = Game::split(input, ',');
-				int move[2];
+		string input;
+		std::cin >> input;
 
-				move[0] = std::stoi(moveStr[0]);
-				move[1] = std::stoi(moveStr[1]);
+		if (input.compare("exit") == 0 || input.compare("quit") == 0) {
+			//quit game
+			isRunning = false;
+			break;
+		}
+		else {
+			std::vector<string> moveStr = Game::split(input, ',');
+			int move[2];
 
-				if (board[move[0]][move[1]] == 0) {
+			move[0] = std::stoi(moveStr[0]);
+			move[1] = std::stoi(moveStr[1]);
+
+			if (board[move[0]][move[1]] == 0) {
+				if (isXTurn) {
 					//play
-					board[move[0]][move[1]] = 2;
-					isXTurn = !isXTurn;
+					board[move[0]][move[1]] = 1;
 				}
 				else {
-					//can't play
-					std::cout << "Can't overwrite another move!" << endl;
-					continue;
+					//play
+					board[move[0]][move[1]] = 2;
 				}
+				isXTurn = !isXTurn;
+			}
+			else {
+				//can't play
+				std::cout << "Can't overwrite another move!" << endl;
+				continue;
 			}
 		}
+
 		if (this->CheckWinState()) {
 			isRunning = false;
 		}
+
 		this->DrawBoard();
 	}
 
@@ -169,7 +152,7 @@ bool Game::CheckWinState() {
 			}
 		}
 	}
-	else if (this->board[1][0] != 0) {
+	if (this->board[1][0] != 0) {
 		//check 1 row columns
 		if (this->board[1][0] == this->board[1][1] && this->board[1][1] == this->board[1][2]) {
 			//middle row won
@@ -186,7 +169,7 @@ bool Game::CheckWinState() {
 			}
 		}
 	}
-	else if (this->board[2][0] != 0) {
+	if (this->board[2][0] != 0) {
 		//check 2 row columns
 		if (this->board[2][0] == this->board[2][1] && this->board[2][1] == this->board[2][2]) {
 			//bottom row won
@@ -204,7 +187,7 @@ bool Game::CheckWinState() {
 		}
 	}
 	//vertical columns
-	else if (this->board[0][0] != 0) {
+	if (this->board[0][0] != 0) {
 		//check 0 column rows
 		if (this->board[0][0] == this->board[1][0] && this->board[1][0] == this->board[2][0]) {
 			//left column won
@@ -221,7 +204,7 @@ bool Game::CheckWinState() {
 			}
 		}
 	}
-	else if (this->board[0][1] != 0) {
+	if (this->board[0][1] != 0) {
 		//check 1 columns rows
 		if (this->board[0][1] == this->board[1][1] && this->board[1][1] == this->board[2][1]) {
 			//middle column won
@@ -238,7 +221,7 @@ bool Game::CheckWinState() {
 			}
 		}
 	}
-	else if (this->board[0][2] != 0) {
+	if (this->board[0][2] != 0) {
 		//check 2 columns rows
 		if (this->board[0][2] == this->board[1][2] && this->board[1][2] == this->board[2][2]) {
 			//right column won
@@ -256,7 +239,7 @@ bool Game::CheckWinState() {
 		}
 	}
 	//diagonal
-	else if (this->board[0][0] != 0) {
+	if (this->board[0][0] != 0) {
 		//check 0 diagonal
 		if (this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2]) {
 			
@@ -273,7 +256,7 @@ bool Game::CheckWinState() {
 			}
 		}
 	}
-	else if (this->board[2][0] != 0) {
+	if (this->board[2][0] != 0) {
 		//check 2 row diagonal
 		if (this->board[2][0] == this->board[1][1] && this->board[1][1] == this->board[0][2]) {
 			
