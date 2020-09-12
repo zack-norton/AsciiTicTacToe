@@ -80,7 +80,18 @@ void Game::DrawPosition(unsigned short value) {
 void Game::Play() {
 	bool isRunning = true;
 	bool isXTurn = true; //x goes first
+	bool isSinglePlayer = false;
 	this->DrawBoard();
+
+	//1 or 2 player?
+	std::cout << "1 or 2 player game?" << endl;
+	std::string oneOrTwo;
+	std::cin >> oneOrTwo;
+
+	if (oneOrTwo.compare("1")) {
+		isSinglePlayer = true;
+	}
+
 
 	while (isRunning) {
 		if (isXTurn) {
