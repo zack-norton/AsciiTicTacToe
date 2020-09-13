@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 Game::Game() {
 	
 }
@@ -149,18 +150,12 @@ void Game::SinglePlayerGame() {
 			//ai move
 			std::cout << "O player move: " << endl;
 
-			//choose random move
-			int xMove = rand() % 3;
-			int yMove = rand() % 3;
+			//find minimax best move
+			Move move = Game::FindBestMove();
+			
+			board[move.x][move.y] = 2;
 
-			while (board[xMove][yMove] != 0) {
-				xMove = rand() % 3;
-				yMove = rand() % 3;
-			}
-
-			board[xMove][yMove] = 2;
-
-			std::cout << xMove << "," << yMove << endl;
+			std::cout << move.x << "," << move.y << endl;
 
 			isXTurn = !isXTurn;
 		}
@@ -232,6 +227,167 @@ void Game::TwoPlayerGame() {
 
 		this->DrawBoard();
 	}
+}
+
+Move Game::FindBestMove() {
+	Move bestMove;
+	bestMove.x = -1;
+	bestMove.y = -1;
+	int bestValue = -1000;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (this->board[i][j] == 0) {
+				this->board[i][j] = 2;
+
+				int moveValue = MiniMax(0, false);
+
+				this->board[i][j] = 0;
+
+				if (moveValue > bestValue) {
+					bestMove.x = i;
+					bestMove.y = j;
+					bestValue = moveValue;
+				}
+			}
+		}
+	}
+
+	return bestMove;
+}
+
+int Game::MiniMax(int depth, bool isMax) {
+
+	int score = evaluate();
+
+	// If Maximizer has won the game return his/her 
+	// evaluated score 
+	if (score == 10)
+		return score;
+
+	// If Minimizer has won the game return his/her 
+	// evaluated score 
+	if (score == -10)
+		return score;
+
+	// If there are no more moves and no winner then 
+	// it is a tie 
+	if (isMovesLeft() == false)
+		return 0;
+
+	if (isMax) {
+		int best = -1000;
+
+		// Traverse all cells 
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				// Check if cell is empty 
+				if (board[i][j] == 0)
+				{
+					// Make the move 
+					board[i][j] = 1;
+
+					// Call minimax recursively and choose 
+					// the maximum value 
+					best = max(best,
+						MiniMax(depth + 1, !isMax));
+
+					// Undo the move 
+					board[i][j] = 0;
+				}
+			}
+		}
+		return best;
+	}
+	else {
+		int best = 1000;
+
+		// Traverse all cells 
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				// Check if cell is empty 
+				if (board[i][j] == 0)
+				{
+					// Make the move 
+					board[i][j] = 2;
+
+					// Call minimax recursively and choose 
+					// the minimum value 
+					best = min(best,
+						MiniMax(depth + 1, !isMax));
+
+					// Undo the move 
+					board[i][j] = 0;
+				}
+			}
+		}
+		return best;
+	}
+}
+
+int Game::evaluate() {
+	// Checking for Rows for X or O victory. 
+	for (int row = 0; row < 3; row++)
+	{
+		if (this->board[row][0] == this->board[row][1] &&
+			this->board[row][1] == this->board[row][2])
+		{
+			if (this->board[row][0] == 1)
+				return +10;
+			else if (this->board[row][0] == 2)
+				return -10;
+		}
+	}
+
+	// Checking for Columns for X or O victory. 
+	for (int col = 0; col < 3; col++)
+	{
+		if (this->board[0][col] == this->board[1][col] &&
+			this->board[1][col] == this->board[2][col])
+		{
+			if (this->board[0][col] == 1)
+				return +10;
+
+			else if (this->board[0][col] == 2)
+				return -10;
+		}
+	}
+
+	// Checking for Diagonals for X or O victory. 
+	if (this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2])
+	{
+		if (this->board[0][0] == 1)
+			return +10;
+		else if (this->board[0][0] == 2)
+			return -10;
+	}
+
+	if (this->board[0][2] == this->board[1][1] && this->board[1][1] == this->board[2][0])
+	{
+		if (this->board[0][2] == 1)
+			return +10;
+		else if (this->board[0][2] == 2)
+			return -10;
+	}
+
+	// Else if none of them have won then return 0 
+	return 0;
+}
+
+bool Game::isMovesLeft() {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (this->board[i][j] == 0) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 bool Game::CheckWinState() {
