@@ -18,8 +18,11 @@ public:
 	void DrawBoard();
 	void DrawPosition(unsigned short value);
 	bool CheckWinState();
+	bool CheckDraw();
 
 	void Play();
+	void SinglePlayerGame();
+	void TwoPlayerGame();
 
 	std::vector<string> split(const std::string& text, char separator);
 };

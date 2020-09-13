@@ -78,8 +78,8 @@ void Game::DrawPosition(unsigned short value) {
 }
 
 void Game::Play() {
-	bool isRunning = true;
-	bool isXTurn = true; //x goes first
+	cout.flush();
+
 	bool isSinglePlayer = false;
 	this->DrawBoard();
 
@@ -88,10 +88,98 @@ void Game::Play() {
 	std::string oneOrTwo;
 	std::cin >> oneOrTwo;
 
-	if (oneOrTwo.compare("1")) {
+	if (oneOrTwo.compare("1") == 0) {
 		isSinglePlayer = true;
 	}
 
+	if (isSinglePlayer) {
+		//launch single player game
+		this->Game::SinglePlayerGame();
+	}
+	else {
+		//launch two player game
+		this->Game::TwoPlayerGame();
+	}
+
+
+	
+
+}
+
+void Game::SinglePlayerGame() {
+	bool isRunning = true;
+	bool isXTurn = true;
+
+	while (isRunning) {
+		if (isXTurn) {
+			//player 1
+			std::cout << "X player move: " << endl;
+
+			string input;
+			std::cin >> input;
+
+			if (input.compare("exit") == 0 || input.compare("quit") == 0) {
+				//quit game
+				isRunning = false;
+				break;
+			}
+			else {
+				std::vector<string> moveStr = Game::split(input, ',');
+				int move[2];
+
+				move[0] = std::stoi(moveStr[0]);
+				move[1] = std::stoi(moveStr[1]);
+
+				if (board[move[0]][move[1]] == 0) {
+					//play
+					board[move[0]][move[1]] = 1;
+					
+					isXTurn = !isXTurn;
+				}
+				else {
+					//can't play
+					std::cout << "Can't overwrite another move!" << endl;
+					continue;
+				}
+			}
+
+			
+		}
+		else {
+			//ai move
+			std::cout << "O player move: " << endl;
+
+			//choose random move
+			int xMove = rand() % 3;
+			int yMove = rand() % 3;
+
+			while (board[xMove][yMove] != 0) {
+				xMove = rand() % 3;
+				yMove = rand() % 3;
+			}
+
+			board[xMove][yMove] = 2;
+
+			std::cout << xMove << "," << yMove << endl;
+
+			isXTurn = !isXTurn;
+		}
+
+		if (this->CheckWinState()) {
+			isRunning = false;
+		}
+
+		if (this->CheckDraw()) {
+			isRunning = false;
+		}
+
+		this->DrawBoard();
+	}
+}
+
+void Game::TwoPlayerGame() {
+	bool isRunning = true;
+	bool isXTurn = true; //x goes first
 
 	while (isRunning) {
 		if (isXTurn) {
@@ -138,9 +226,12 @@ void Game::Play() {
 			isRunning = false;
 		}
 
+		if (this->CheckDraw()) {
+			isRunning = false;
+		}
+
 		this->DrawBoard();
 	}
-
 }
 
 bool Game::CheckWinState() {
@@ -285,6 +376,24 @@ bool Game::CheckWinState() {
 		}
 	}
 	return isWinner;
+}
+
+bool Game::CheckDraw() {
+	bool isDraw = true;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (this->board[i][j] == 0) {
+				isDraw = false;
+			}
+		}
+	}
+
+	if (isDraw) {
+		std::cout << "Draw Game!" << endl;
+	}
+
+	return isDraw;
 }
 
 std::vector<string> Game::split(const std::string& text, char separator) {
