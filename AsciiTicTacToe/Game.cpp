@@ -95,10 +95,12 @@ void Game::Play() {
 
 	if (isSinglePlayer) {
 		//launch single player game
+		std::cout << "Single Player Game" << endl;
 		this->Game::SinglePlayerGame();
 	}
 	else {
 		//launch two player game
+		std::cout << "Two Player Game" << endl;
 		this->Game::TwoPlayerGame();
 	}
 
